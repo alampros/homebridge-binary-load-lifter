@@ -1,5 +1,7 @@
 # Binary Load Lifter
 
+<img src="./docs/dreyfuss.png" style="max-height: 300px;margin-bottom: 2em">
+
 Binary Load Lifter is a Homebridge-controlled platform-lift project built around
 a DIHOOL IPS-S2 controller and an ESP32 hardware observer. The name is a nod to
 the *Star Wars* binary load lifter—and the old *Saturday Night Live* sketch.

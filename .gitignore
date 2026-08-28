@@ -1,11 +1,5 @@
 .DS_Store
 
-# Homebridge plugin
-homebridge-plugin/node_modules/
-homebridge-plugin/dist/
-homebridge-plugin/.homebridge-dev/
-homebridge-plugin/*.tsbuildinfo
-
 # ESP32 firmware
 .pio/
 include/secrets.h
