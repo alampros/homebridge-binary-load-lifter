@@ -1,7 +1,7 @@
 {
 	"name": "homebridge-binary-load-lifter",
 	"displayName": "Homebridge Binary Load Lifter",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Homebridge plugin to control DIHOOL IPS-S2 scissor lifts via the eWeLink LAN protocol and custom ESP32 sensor package.",
 	"keywords": [
 		"accessibility",
