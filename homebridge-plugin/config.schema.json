@@ -1,0 +1,240 @@
+{
+  "pluginAlias": "BinaryLoadLifter",
+  "pluginType": "platform",
+  "singular": true,
+  "strictValidation": true,
+  "headerDisplay": "Control DIHOOL IPS-S2 scissor lifts via the eWeLink LAN protocol. Enter your eWeLink credentials for automatic device discovery, or configure devices manually with their Device ID and LAN Key.",
+  "footerDisplay": "For help, see the [GitHub repository](https://github.com/alampros/homebridge-binary-load-lifter).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Plugin Name",
+        "type": "string",
+        "default": "Binary Load Lifter",
+        "required": true
+      },
+      "username": {
+        "title": "eWeLink Email or Phone",
+        "type": "string",
+        "description": "Your eWeLink account email or phone number. Required for automatic device discovery.",
+        "placeholder": "user@example.com"
+      },
+      "password": {
+        "title": "eWeLink Password",
+        "type": "string",
+        "description": "Your eWeLink account password.",
+        "x-schema-form": {
+          "type": "password"
+        }
+      },
+      "countryCode": {
+        "title": "Country Code",
+        "type": "string",
+        "default": "+1",
+        "description": "Your country calling code (e.g. +1 for US, +44 for UK).",
+        "placeholder": "+1"
+      },
+      "mode": {
+        "title": "Connection Mode",
+        "type": "string",
+        "default": "auto",
+        "oneOf": [
+          { "title": "Auto (cloud discovery + LAN control)", "enum": ["auto"] },
+          { "title": "LAN Only (requires manual device config)", "enum": ["lan"] }
+        ],
+        "description": "In 'auto' mode, the plugin logs into eWeLink to discover devices, then controls them over LAN. In 'lan' mode, no cloud connection is made and each device entry must include a Device ID and LAN Key."
+      },
+      "debug": {
+        "title": "Debug Logging",
+        "type": "boolean",
+        "default": false,
+        "description": "Enable verbose debug logging."
+      },
+      "binaryLoadLifterCallbackBaseUrl": {
+        "title": "Binary Load Lifter Callback Base URL",
+        "type": "string",
+        "pattern": "^http://[^/]+/?$",
+        "description": "Full local HTTP base URL that Binary Load Lifter can use to reach this Homebridge server. Include the port, for example http://10.0.0.10:8582/. Leave blank to disable callbacks and use polling only.",
+        "placeholder": "http://10.0.0.10:8582/"
+      },
+      "devices": {
+        "title": "Lift Devices",
+        "type": "array",
+        "description": "Per-device configuration. Every entry requires a Device ID so settings stay attached to the correct lift. Manual/LAN-only devices also require a LAN Key. With cloud discovery, devices are found automatically; use this section for per-device overrides.",
+        "items": {
+          "type": "object",
+          "required": ["deviceId"],
+          "properties": {
+            "deviceId": {
+              "title": "Device ID",
+              "type": "string",
+              "minLength": 1,
+              "pattern": ".*\\S.*",
+              "description": "The eWeLink device ID (e.g. 100293a98d). Every lift entry must have this value so its settings stay attached to the correct lift. Found in the eWeLink app under device settings, or in the Homebridge log on startup.",
+              "placeholder": "100293a98d"
+            },
+            "label": {
+              "title": "Display Name",
+              "type": "string",
+              "description": "Custom name for this lift in HomeKit.",
+              "placeholder": "Sunroom Lift"
+            },
+            "lanKey": {
+              "title": "LAN Key",
+              "type": "string",
+              "description": "Device encryption key. Required for manual/LAN-only devices. Cloud-discovered devices get this automatically. Use the get-lankey script to obtain this.",
+              "x-schema-form": {
+                "type": "password"
+              }
+            },
+            "ipAddress": {
+              "title": "IP Address Override",
+              "type": "string",
+              "description": "Manual IP address. Only needed if mDNS discovery doesn't find the device.",
+              "placeholder": "192.168.1.100",
+              "format": "ipv4"
+            },
+            "upChannel": {
+              "title": "Up Channel",
+              "type": "integer",
+              "placeholder": "0",
+              "minimum": 0,
+              "maximum": 3,
+              "description": "eWeLink outlet index for the UP motor control. Default: 0."
+            },
+            "downChannel": {
+              "title": "Down Channel",
+              "type": "integer",
+              "placeholder": "1",
+              "minimum": 0,
+              "maximum": 3,
+              "description": "eWeLink outlet index for the DOWN motor control. Default: 1."
+            },
+            "manualSwitches": {
+              "title": "Manual Override Switches",
+              "type": "boolean",
+              "default": false,
+              "description": "Expose Manual Up and Manual Down switches that send raw motor pulses, bypassing state tracking. Useful for recovering from state mismatches or manual control."
+            },
+            "esp32Host": {
+              "title": "Binary Load Lifter ESP32 Hostname",
+              "type": "string",
+              "description": "mDNS hostname or IP address of the Binary Load Lifter ESP32. Leave blank to disable sensor polling.",
+              "placeholder": "binary-load-lifter.local"
+            },
+            "esp32Token": {
+              "title": "Binary Load Lifter ESP32 API Token",
+              "type": "string",
+              "description": "The shared API token configured in the ESP32 firmware.",
+              "x-schema-form": { "type": "password" }
+            },
+            "esp32PollIntervalSec": {
+              "title": "ESP32 Poll Interval (seconds)",
+              "type": "number",
+              "default": 2,
+              "minimum": 1,
+              "maximum": 60,
+              "description": "How often to read the ESP32 sensor status."
+            },
+            "esp32DebugLogging": {
+              "title": "ESP32 Debug Logging",
+              "type": "boolean",
+              "default": false,
+              "description": "Log every ESP32 distance reading and calculated position. Useful while calibrating; leave off during normal use."
+            },
+            "esp32SyncTargetPosition": {
+              "title": "Show Measured Percentage in Home",
+              "type": "boolean",
+              "default": false,
+              "description": "Synchronize HomeKit's target display with the measured percentage. Keep disabled until the ESP32 sensor is installed and calibrated. This changes HomeKit display state only and never sends a lift command."
+            },
+            "invertMotorChannelDirections": {
+              "title": "Invert Motor Channel Directions",
+              "type": "boolean",
+              "default": false,
+              "description": "Swap the observed motor directions reported by Binary Load Lifter. By default motor detector channel 1 means up and channel 2 means down. This affects HomeKit movement display only and never changes the DIHOOL control channels."
+            },
+            "minDistanceMm": {
+              "title": "Minimum Distance (mm)",
+              "type": "number",
+              "default": 150,
+              "minimum": 1,
+              "maximum": 4000,
+              "description": "Minimum sensor reading, measured with the lift fully raised. This maps to 100%."
+            },
+            "maxDistanceMm": {
+              "title": "Maximum Distance (mm)",
+              "type": "number",
+              "default": 1000,
+              "minimum": 1,
+              "maximum": 4000,
+              "description": "Maximum sensor reading, measured with the lift fully lowered. This maps to 0%."
+            }
+          }
+        }
+      }
+    }
+  },
+  "layout": [
+    {
+      "type": "fieldset",
+      "title": "eWeLink Account",
+      "description": "Enter your eWeLink credentials for automatic device discovery.",
+      "expandable": true,
+      "expanded": true,
+      "items": ["username", "password", "countryCode"]
+    },
+    {
+      "key": "devices",
+      "type": "array",
+      "title": "Lift Devices",
+      "expandable": true,
+      "expanded": true,
+      "startEmpty": true,
+      "buttonText": "Add Lift",
+      "items": [
+        "devices[].deviceId",
+        "devices[].label",
+        {
+          "type": "fieldset",
+          "title": "Network & Channels",
+          "description": "Only change these if you know what you're doing.",
+          "expandable": true,
+          "expanded": false,
+          "items": [
+            "devices[].lanKey",
+            "devices[].ipAddress",
+            "devices[].upChannel",
+            "devices[].downChannel",
+            "devices[].manualSwitches"
+          ]
+        },
+        {
+          "type": "fieldset",
+          "title": "Binary Load Lifter Sensor",
+          "description": "Configure the optional Binary Load Lifter ESP32 distance sensor and its calibration.",
+          "expandable": true,
+          "expanded": false,
+          "items": [
+            "devices[].esp32Host",
+            "devices[].esp32Token",
+            "devices[].esp32PollIntervalSec",
+            "devices[].esp32DebugLogging",
+            "devices[].esp32SyncTargetPosition",
+            "devices[].invertMotorChannelDirections",
+            "devices[].minDistanceMm",
+            "devices[].maxDistanceMm"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "General Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": ["mode", "debug", "binaryLoadLifterCallbackBaseUrl"]
+    }
+  ]
+}

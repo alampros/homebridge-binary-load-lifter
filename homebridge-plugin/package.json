@@ -1,0 +1,64 @@
+{
+	"name": "homebridge-binary-load-lifter",
+	"displayName": "Homebridge Binary Load Lifter",
+	"version": "0.0.1",
+	"description": "Homebridge plugin to control DIHOOL IPS-S2 scissor lifts via the eWeLink LAN protocol and custom ESP32 sensor package.",
+	"keywords": [
+		"accessibility",
+		"dihool",
+		"ewelink",
+		"homebridge",
+		"homebridge-plugin",
+		"homekit",
+		"lift",
+		"motor-controller",
+		"scissor-lift",
+		"esp32"
+	],
+	"license": "MIT",
+	"author": "Aaron Lampros",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alampros/homebridge-binary-load-lifter.git",
+		"directory": "homebridge-plugin"
+	},
+	"bugs": {
+		"url": "https://github.com/alampros/homebridge-binary-load-lifter/issues"
+	},
+	"homepage": "https://github.com/alampros/homebridge-binary-load-lifter#readme",
+	"files": [
+		"dist",
+		"config.schema.json",
+		"CHANGELOG.md"
+	],
+	"type": "module",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"format": "oxfmt src scripts",
+		"format:check": "oxfmt --check src scripts",
+		"watch": "tsc --watch",
+		"prepublishOnly": "npm run build",
+		"lint": "oxlint src scripts && tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"dev": "npm run build && homebridge -D -U ./.homebridge-dev -P ."
+	},
+	"dependencies": {
+		"multicast-dns": "^7.2.5"
+	},
+	"devDependencies": {
+		"@types/multicast-dns": "^7.2.4",
+		"@types/node": "^22.0.0",
+		"homebridge": "^2.0.0",
+		"oxfmt": "^0.65.0",
+		"oxlint": "^1.72.0",
+		"typescript": "^7.0.1-rc",
+		"vitest": "^4.1.9"
+	},
+	"engines": {
+		"homebridge": "^1.6.0 || ^2.0.0",
+		"node": "^22.12.0 || ^24.0.0"
+	},
+	"packageManager": "npm@11.18.0+sha512.4faecce0be70366d1c67b1012c4adc1246354a6cc45bf589f92003073b05518d547403df1475c542d67a4845e22b4fafcd7cac0af02c7a96cc6814f09eb003fb"
+}

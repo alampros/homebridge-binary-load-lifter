@@ -1,0 +1,81 @@
+name: Homebridge CI / Release
+
+on:
+  pull_request:
+    paths:
+      - "homebridge-plugin/**"
+      - ".github/workflows/release-please.yml"
+      - "release-please-config.json"
+      - ".release-please-manifest.json"
+  push:
+    branches: [main]
+    paths:
+      - "homebridge-plugin/**"
+      - ".github/workflows/release-please.yml"
+      - "release-please-config.json"
+      - ".release-please-manifest.json"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: homebridge-plugin
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: homebridge-plugin/package-lock.json
+      - run: corepack enable
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Verify npm package contents
+        run: npm pack --dry-run
+
+  release-please:
+    if: github.event_name == 'push'
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish-release:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
+      - run: corepack enable npm
+      - run: corepack prepare --activate
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --access public

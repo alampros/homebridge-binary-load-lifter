@@ -1,0 +1,35 @@
+name: ESP32 Firmware CI
+
+on:
+  pull_request:
+    paths:
+      - "platformio.ini"
+      - "src/**"
+      - "include/**"
+      - "lib/**"
+      - "test/**"
+      - ".github/workflows/firmware-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "platformio.ini"
+      - "src/**"
+      - "include/**"
+      - "lib/**"
+      - "test/**"
+      - ".github/workflows/firmware-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: pip install platformio==6.1.19
+      - run: cp include/secrets.example.h include/secrets.h
+      - run: pio run

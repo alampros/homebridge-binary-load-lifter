@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-labelledby="title description">
+  <title id="title">PC817 protected input channel wiring</title>
+  <desc id="description">Breadboard wiring for one protected PC817 input channel. Battery positive connects through three separate one-kilohm resistors in series to IN1. Battery negative connects to input G. A 1N4007 diode bridges IN1 and G with its silver-banded end toward IN1. The battery remains disconnected until the wiring is checked.</desc>
+  <style>
+    svg { color: #1a1c1f; background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    text { fill: currentColor; font-size: 14px; }
+    .small { fill: #687078; font-size: 12px; }
+    .wire { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .positive { stroke: #d92d28; }
+    .part { fill: #f7f8f9; stroke: #c9cdd2; stroke-width: 2; }
+    .terminal { fill: #e8eaed; stroke: currentColor; stroke-width: 2; }
+    .band { fill: #687078; }
+    .warning { fill: #fff1b8; }
+    .resistor { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      svg { color: #fff; background: #181818; }
+      .small { fill: #a7adb4; }
+      .part { fill: #242629; stroke: #4a4e53; }
+      .terminal { fill: #3a3d41; }
+      .band { fill: #a7adb4; }
+      .warning { fill: #4b3c08; }
+      .positive { stroke: #ff6764; }
+    }
+  </style>
+
+  <rect class="warning" x="20" y="18" width="860" height="48" rx="8"/>
+  <text x="450" y="48" text-anchor="middle" font-weight="500">BATTERY DISCONNECTED — build this, then send a photo before testing</text>
+
+  <text x="90" y="116" text-anchor="middle" font-weight="500">9 V battery</text>
+  <rect class="part" x="48" y="140" width="84" height="145" rx="8"/>
+  <circle cx="72" cy="140" r="9" fill="#d92d28"/>
+  <circle cx="108" cy="140" r="9" fill="currentColor"/>
+  <text x="72" y="180" text-anchor="middle" fill="#d92d28">+</text>
+  <text x="108" y="180" text-anchor="middle">−</text>
+
+  <path class="wire positive" d="M72 140 V106 H153"/>
+  <circle cx="178" cy="106" r="4" fill="#d92d28"/>
+  <circle cx="214" cy="106" r="4" fill="#d92d28"/>
+  <path class="wire positive" d="M153 106 H178 M214 106 H240"/>
+  <path class="resistor" d="M178 106 l5 -10 l8 20 l8 -20 l8 20 l7 -10"/>
+  <text x="196" y="86" text-anchor="middle">1 kΩ</text>
+
+  <circle cx="265" cy="106" r="4" fill="#d92d28"/>
+  <circle cx="301" cy="106" r="4" fill="#d92d28"/>
+  <path class="wire positive" d="M240 106 H265 M301 106 H327"/>
+  <path class="resistor" d="M265 106 l5 -10 l8 20 l8 -20 l8 20 l7 -10"/>
+  <text x="283" y="86" text-anchor="middle">1 kΩ</text>
+
+  <circle cx="352" cy="106" r="4" fill="#d92d28"/>
+  <circle cx="388" cy="106" r="4" fill="#d92d28"/>
+  <path class="wire positive" d="M327 106 H352 M388 106 H710 V218"/>
+  <path class="resistor" d="M352 106 l5 -10 l8 20 l8 -20 l8 20 l7 -10"/>
+  <text x="370" y="86" text-anchor="middle">1 kΩ</text>
+  <text class="small" x="283" y="137" text-anchor="middle">three separate resistors, connected end-to-end</text>
+
+  <path class="wire" d="M108 140 V455 H710 V320"/>
+  <text x="245" y="482" text-anchor="middle">battery black wire</text>
+
+  <rect class="part" x="660" y="145" width="190" height="235" rx="10"/>
+  <text x="755" y="169" text-anchor="middle" font-weight="500">PC817 input side</text>
+  <rect class="part" x="690" y="184" width="130" height="68" rx="6"/>
+  <circle class="terminal" cx="710" cy="218" r="13"/>
+  <text x="756" y="223">IN1</text>
+  <rect class="part" x="690" y="286" width="130" height="68" rx="6"/>
+  <circle class="terminal" cx="710" cy="320" r="13"/>
+  <text x="756" y="325">G</text>
+
+  <path class="wire" d="M650 218 H710 M650 320 H710"/>
+  <line x1="650" y1="218" x2="650" y2="244" stroke="currentColor" stroke-width="3"/>
+  <line x1="650" y1="294" x2="650" y2="320" stroke="currentColor" stroke-width="3"/>
+  <rect class="part" x="638" y="244" width="24" height="50" rx="4"/>
+  <rect class="band" x="638" y="244" width="24" height="10"/>
+  <text x="620" y="271" text-anchor="end" font-weight="500">1N4007</text>
+  <text class="small" x="620" y="291" text-anchor="end">silver band at the IN1 end</text>
+
+  <text class="small" x="755" y="407" text-anchor="middle">Use only IN1 and its neighboring G</text>
+  <rect x="330" y="505" width="240" height="34" rx="17" fill="#e8eaed"/>
+  <text x="450" y="527" text-anchor="middle">Yellow jumpers: REMOVED</text>
+</svg>

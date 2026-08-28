@@ -1,0 +1,74 @@
+version: "3"
+
+silent: true
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  install:
+    desc: Install the Homebridge plugin dependencies
+    dir: homebridge-plugin
+    cmds:
+      - npm ci
+
+  format:
+    desc: Format the Homebridge TypeScript code
+    dir: homebridge-plugin
+    cmds:
+      - npm run format
+
+  format:check:
+    desc: Check Homebridge TypeScript formatting without changing files
+    dir: homebridge-plugin
+    cmds:
+      - npm run format:check
+
+  lint:
+    desc: Lint and type-check the Homebridge plugin
+    dir: homebridge-plugin
+    cmds:
+      - npm run lint
+
+  test:
+    desc: Run the Homebridge plugin tests
+    dir: homebridge-plugin
+    cmds:
+      - npm test
+
+  plugin:build:
+    desc: Build the Homebridge plugin
+    dir: homebridge-plugin
+    cmds:
+      - npm run build
+
+  plugin:pack:
+    desc: Preview the files included in the npm package
+    dir: homebridge-plugin
+    cmds:
+      - npm pack --dry-run
+
+  firmware:build:
+    desc: Compile the ESP32 firmware
+    cmds:
+      - uvx --from platformio==6.1.19 pio run
+
+  firmware:upload-ota:
+    desc: Build and upload the ESP32 firmware over the local network
+    cmds:
+      - ./scripts/build-and-upload-ota.sh
+
+  build:
+    desc: Build the Homebridge plugin and ESP32 firmware
+    cmds:
+      - task: plugin:build
+      - task: firmware:build
+
+  check:
+    desc: Run all required checks after making code changes
+    cmds:
+      - task: format:check
+      - task: lint
+      - task: test
