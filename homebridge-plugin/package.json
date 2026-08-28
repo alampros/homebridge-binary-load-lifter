@@ -10,7 +10,6 @@
 		"homebridge",
 		"homebridge-plugin",
 		"homekit",
-		"lift",
 		"motor-controller",
 		"scissor-lift",
 		"esp32"
