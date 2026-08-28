@@ -103,7 +103,3 @@ npm run build          # TypeScript 7 RC
 npm run lint           # oxlint + tsc --noEmit
 npm run dev            # build + run local Homebridge instance
 ```
-
-## License
-
-MIT
